@@ -20,6 +20,18 @@ import os
 from datetime import datetime
 import random
 
+def Dropbox_Upload(val, unit):
+    db = dropbox.Dropbox(os.environ['DROPBOX_ACCESS_KEY'])
+    try:
+        md, file = db.files_download("/file.csv")
+        content = file.content
+    except:
+        content = "timestamp;weight;unit\n"
+
+    content +=  str(datetime.now()) + ";" + str(val) + ";" + unit + "\n"
+
+    db.files_upload(content, "/file.csv", mode=dropbox.files.WriteMode('overwrite', None))
+
 dev_id = 0
 try:
     sock = bluez.hci_open_dev(dev_id)
@@ -68,14 +80,3 @@ except KeyboardInterrupt:
         sys.exit(1)
 
 
-def Dropbox_Upload(val, unit):
-    db = dropbox.Dropbox(os.environ['DROPBOX_ACCESS_KEY'])
-    try:
-        md, file = db.files_download("/file.csv")
-        content = file.content
-    except:
-        content = "timestamp;weight;unit\n"
-
-    content +=  str(datetime.now()) + ";" + str(val) + ";" + unit + "\n"
-
-    db.files_upload(content, "/file.csv", mode=dropbox.files.WriteMode('overwrite', None))
