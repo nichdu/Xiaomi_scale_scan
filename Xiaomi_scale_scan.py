@@ -44,6 +44,9 @@ except:
 blescan.hci_le_set_scan_parameters(sock)
 blescan.hci_enable_le_scan(sock)
 
+measure_time = 0
+value = 0.0
+
 try:
     while True:
         returnedList = blescan.parse_events(sock, 1)
@@ -61,9 +64,10 @@ try:
                 if measunit.startswith(('22', 'a2')): unit = 'kg' ; measured = measured / 2
                   
                 if unit:
-                    print("measured : %s %s" % (measured, unit))
-                    Dropbox_Upload(measured, unit)
-
+                    if not measured == value:
+                        if int(time.time()) - measure_time > 7200: # we allow one measurement per two hours
+                            print("measured : %s %s" % (measured, unit))
+                            Dropbox_Upload(measured, unit)
                 else:
                     print 'scale is sleeping'
 
