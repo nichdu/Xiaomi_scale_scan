@@ -4,6 +4,7 @@
 # based on SwitchDoc Labs's iBeacon-Scanner-
 # https://github.com/switchdoclabs/iBeacon-Scanner-
 
+import bluetooth._bluetooth as bluez
 import blescan
 import sys
 import time
