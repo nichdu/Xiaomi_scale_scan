@@ -15,6 +15,8 @@ import time
 
 import bluetooth._bluetooth as bluez
 
+import dropbox
+
 dev_id = 0
 try:
 	sock = bluez.hci_open_dev(dev_id)
@@ -33,7 +35,7 @@ try:
 		if len(returnedList) > 0:
 			(mac, uuid, major, minor, txpower, rssi) = returnedList[0].split(',', 6)
 			# change mac and uuid
-			if mac == '88:0f:10:83:ca:5c' and uuid[0:22] == '01880f1083ca5c0d161d18':
+            if mac == '88:0f:10:87:7f:c3' and uuid[0:22] == '01880f10877fc30d161d18':
 				measunit = uuid[22:24]	
 				measured = int((uuid[26:28] + uuid[24:26]), 16) * 0.01
 
