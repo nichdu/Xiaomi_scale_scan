@@ -12,7 +12,7 @@ This reads the weight from a Xiami Mi Scale, records it into a CSV in a Dropbox 
 2. Download blescan from [here](https://github.com/switchdoclabs/iBeacon-Scanner-/blob/master/blescan.py)
 3. Create a Dropbox "App Folder" app [see here](https://dropbox.com/developers/apps)
 4. Create a Pushover account and application
-5. Find out your Mi Scale MAC address (any bluetooth le scanner should work fine for this)
+5. Find out your Mi Scale MAC address with `find_mac.py`
 6. Call mipushbox like this:
 	
 	```
