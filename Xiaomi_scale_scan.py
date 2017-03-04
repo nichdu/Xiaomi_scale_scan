@@ -22,27 +22,27 @@ import random
 
 dev_id = 0
 try:
-	sock = bluez.hci_open_dev(dev_id)
-	#print "ble thread started"
+    sock = bluez.hci_open_dev(dev_id)
+    #print "ble thread started"
 
 except:
-	print "error accessing bluetooth device..."
-	sys.exit(1)
+    print "error accessing bluetooth device..."
+    sys.exit(1)
 
 blescan.hci_le_set_scan_parameters(sock)
 blescan.hci_enable_le_scan(sock)
 
 try:
-	while True:
-		returnedList = blescan.parse_events(sock, 1)
-		if len(returnedList) > 0:
-			(mac, uuid, major, minor, txpower, rssi) = returnedList[0].split(',', 6)
-			# change mac and uuid
+    while True:
+        returnedList = blescan.parse_events(sock, 1)
+        if len(returnedList) > 0:
+            (mac, uuid, major, minor, txpower, rssi) = returnedList[0].split(',', 6)
+            # change mac and uuid
             if mac == os.environ['MI_SCALE_MAC'] and uuid[0:22] == '01880f10877fc30d161d18':
-				measunit = uuid[22:24]	
-				measured = int((uuid[26:28] + uuid[24:26]), 16) * 0.01
+                measunit = uuid[22:24]  
+                measured = int((uuid[26:28] + uuid[24:26]), 16) * 0.01
 
-				unit = ''
+                unit = ''
 
                                 if measunit.startswith(('03', 'b3')): unit = 'lbs'
                                 if measunit.startswith(('12', 'b2')): unit = 'jin'
@@ -52,30 +52,30 @@ try:
 #                               if measunit == '12' or measunit == 'b2' : unit = 'jin'
 #                               if measunit == '22' or measunit == 'a2' : unit = 'Kg' ;  measured = measured / 2
 
-					
-				if unit:
-					print("measured : %s %s" % (measured, unit))
-					Dropbox_Upload(measured, unit)
+                    
+                if unit:
+                    print("measured : %s %s" % (measured, unit))
+                    Dropbox_Upload(measured, unit)
 
-				else:
-					print 'scale is sleeping'
+                else:
+                    print 'scale is sleeping'
 
-		time.sleep(2)
-				
-		# to compare previous measurement , use major and minor ( should be time of measurement)
-	
+        time.sleep(2)
+                
+        # to compare previous measurement , use major and minor ( should be time of measurement)
+    
 except KeyboardInterrupt:
-		sys.exit(1)
+        sys.exit(1)
 
 
 def Dropbox_Upload(val, unit):
-	db = dropbox.Dropbox(os.environ['DROPBOX_ACCESS_KEY'])
-	try:
-		md, file = db.files_download("/file.csv")
-		content = file.content
-	except:
-		content = "timestamp;weight;unit\n"
+    db = dropbox.Dropbox(os.environ['DROPBOX_ACCESS_KEY'])
+    try:
+        md, file = db.files_download("/file.csv")
+        content = file.content
+    except:
+        content = "timestamp;weight;unit\n"
 
-	content +=  str(datetime.now()) + ";" + str(val) + ";" + unit + "\n"
+    content +=  str(datetime.now()) + ";" + str(val) + ";" + unit + "\n"
 
-	db.files_upload(content, "/file.csv", mode=dropbox.files.WriteMode('overwrite', None))
+    db.files_upload(content, "/file.csv", mode=dropbox.files.WriteMode('overwrite', None))
