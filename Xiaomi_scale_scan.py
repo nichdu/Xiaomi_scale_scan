@@ -18,7 +18,7 @@ import bluetooth._bluetooth as bluez
 import dropbox
 import os
 from datetime import datetime
-import random
+import httplib, urllib
 
 def Dropbox_Upload(val, unit):
     db = dropbox.Dropbox(os.environ['DROPBOX_ACCESS_KEY'])
@@ -31,6 +31,17 @@ def Dropbox_Upload(val, unit):
     content +=  str(datetime.now()) + ";" + str(val) + ";" + unit + "\n"
 
     db.files_upload(content, "/weight.csv", mode=dropbox.files.WriteMode('overwrite', None))
+
+def push(val, unit):
+    conn = httplib.HTTPSConnection("api.pushover.net:443")
+    conn.request("POST", "/1/messages.json",
+      urllib.urlencode({
+        "token": os.environ['PUSHOVER_API_KEY'],
+        "user": os.environ['PUSHOVER_USER_KEY'],
+        "message": val + " " + unit,
+        "title": "New scale measurement"
+      }), { "Content-type": "application/x-www-form-urlencoded" })
+    conn.getresponse()
 
 dev_id = 0
 try:
@@ -67,6 +78,7 @@ try:
                     if (int(time.time()) - measure_time) > 7200 or not measured == value:
                         print("measured : %s %s" % (measured, unit))
                         Dropbox_Upload(measured, unit)
+                        push(val, unit)
                         measure_time = int(time.time())
                         value = measured
                 else:
