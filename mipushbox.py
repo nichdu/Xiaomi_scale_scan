@@ -1,4 +1,6 @@
-# Xiaomi_scale_scan.py by chaeplin@gmail.com 
+#!/usr/bin/env python2.7
+# mipushbox by Tjark Saul
+# based on Xiaomi_scale_scan.py by chaeplin@gmail.com 
 # based on SwitchDoc Labs's iBeacon-Scanner-
 # https://github.com/switchdoclabs/iBeacon-Scanner-
  
