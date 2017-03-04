@@ -44,9 +44,9 @@ try:
 
                 unit = ''
 
-                                if measunit.startswith(('03', 'b3')): unit = 'lbs'
-                                if measunit.startswith(('12', 'b2')): unit = 'jin'
-                                if measunit.startswith(('22', 'a2')): unit = 'Kg' ; measured = measured / 2
+                if measunit.startswith(('03', 'b3')): unit = 'lbs'
+                if measunit.startswith(('12', 'b2')): unit = 'jin'
+                if measunit.startswith(('22', 'a2')): unit = 'Kg' ; measured = measured / 2
 
 #                               if measunit == '03' or measunit == 'a3' : unit = 'lbs' 
 #                               if measunit == '12' or measunit == 'b2' : unit = 'jin'
