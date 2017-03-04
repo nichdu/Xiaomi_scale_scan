@@ -64,12 +64,11 @@ try:
                 if measunit.startswith(('22', 'a2')): unit = 'kg' ; measured = measured / 2
                   
                 if unit:
-                    if not measured == value:
-                        if (int(time.time()) - measure_time) > 7200: # we allow one measurement per two hours
-                            print("measured : %s %s" % (measured, unit))
-                            Dropbox_Upload(measured, unit)
-                            measure_time = int(time.time())
-                            value = measured
+                    if (int(time.time()) - measure_time) > 7200 or not measured == value:
+                        print("measured : %s %s" % (measured, unit))
+                        Dropbox_Upload(measured, unit)
+                        measure_time = int(time.time())
+                        value = measured
                 else:
                     print 'scale is sleeping'
 
