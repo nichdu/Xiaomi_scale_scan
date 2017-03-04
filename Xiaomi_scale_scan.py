@@ -23,14 +23,14 @@ import random
 def Dropbox_Upload(val, unit):
     db = dropbox.Dropbox(os.environ['DROPBOX_ACCESS_KEY'])
     try:
-        md, file = db.files_download("/file.csv")
+        md, file = db.files_download("/weight.csv")
         content = file.content
     except:
         content = "timestamp;weight;unit\n"
 
     content +=  str(datetime.now()) + ";" + str(val) + ";" + unit + "\n"
 
-    db.files_upload(content, "/file.csv", mode=dropbox.files.WriteMode('overwrite', None))
+    db.files_upload(content, "/weight.csv", mode=dropbox.files.WriteMode('overwrite', None))
 
 dev_id = 0
 try:
