@@ -78,7 +78,7 @@ try:
                     if (int(time.time()) - measure_time) > 7200 or not measured == value:
                         print("measured : %s %s" % (measured, unit))
                         Dropbox_Upload(measured, unit)
-                        push(val, unit)
+                        push(measured, unit)
                         measure_time = int(time.time())
                         value = measured
                 else:
