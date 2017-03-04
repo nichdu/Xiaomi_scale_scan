@@ -38,7 +38,7 @@ def push(val, unit):
       urllib.urlencode({
         "token": os.environ['PUSHOVER_API_KEY'],
         "user": os.environ['PUSHOVER_USER_KEY'],
-        "message": val + " " + unit,
+        "message": str(val) + " " + unit,
         "title": "New scale measurement"
       }), { "Content-type": "application/x-www-form-urlencoded" })
     conn.getresponse()
