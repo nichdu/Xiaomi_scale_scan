@@ -16,6 +16,9 @@ import time
 import bluetooth._bluetooth as bluez
 
 import dropbox
+import os
+from datetime import datetime
+import random
 
 dev_id = 0
 try:
@@ -35,7 +38,7 @@ try:
 		if len(returnedList) > 0:
 			(mac, uuid, major, minor, txpower, rssi) = returnedList[0].split(',', 6)
 			# change mac and uuid
-            if mac == '88:0f:10:87:7f:c3' and uuid[0:22] == '01880f10877fc30d161d18':
+            if mac == os.environ['MI_SCALE_MAC'] and uuid[0:22] == '01880f10877fc30d161d18':
 				measunit = uuid[22:24]	
 				measured = int((uuid[26:28] + uuid[24:26]), 16) * 0.01
 
@@ -52,6 +55,8 @@ try:
 					
 				if unit:
 					print("measured : %s %s" % (measured, unit))
+					Dropbox_Upload(measured, unit)
+
 				else:
 					print 'scale is sleeping'
 
@@ -61,3 +66,16 @@ try:
 	
 except KeyboardInterrupt:
 		sys.exit(1)
+
+
+def Dropbox_Upload(val, unit):
+	db = dropbox.Dropbox(os.environ['DROPBOX_ACCESS_KEY'])
+	try:
+		md, file = db.files_download("/file.csv")
+		content = file.content
+	except:
+		content = "timestamp;weight;unit\n"
+
+	content +=  str(datetime.now()) + ";" + str(val) + ";" + unit + "\n"
+
+	db.files_upload(content, "/file.csv", mode=dropbox.files.WriteMode('overwrite', None))
