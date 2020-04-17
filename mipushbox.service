@@ -1,0 +1,14 @@
+[Unit]
+Description=mipushbox
+After=bluetooth.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=simple
+Restart=always
+RestartSec=10
+User=mipushbox
+ExecStart=/usr/bin/env python2.7 -u /opt/mipushbox/mipushbox.py
+
+[Install]
+WantedBy=multi-user.target
